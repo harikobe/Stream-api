@@ -1,0 +1,45 @@
+version: '3'
+services:
+    db:
+      container_name: postgresql_db #setting container_name
+      image: postgres #setting the image
+      restart: always #image need to restart if it is stopped 
+      ports:
+        - 5432:5432
+      environment: #set up the needed env tables
+        - POSTGRES_USER=${DB_USER}
+        - POSTGRES_PASSWORD=${DB_PASSWORD}
+        - POSTGRES_DB=${DB_NAME}
+      volumes:
+        - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+#----------------------------------------------------------------------------
+    pgadmin:
+      container_name: pgadmin #setting container_name
+      image: dpage/pgadmin4 #setting the image
+      environment: #set up the needed env tables
+        - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+        - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      ports:
+        - 5050:80 #80 -> containers port(http or internet port)
+      depends_on:
+        - db
+#------------------------------------------------------------------------------
+    app:
+        build: 
+          context: .
+          dockerfile: Dockerfile
+        command: bash -c "uvicorn stream_data_api:app --host 0.0.0.0 --port 8000 --reload"
+        container_name: stream-api
+        volumes:
+          - .:/app #add everything in the dir to "app"
+        ports:
+          - "8000:8000"
+        env_file:
+          - .env
+        depends_on:
+          - db
+
+  
+
+
