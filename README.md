@@ -2,13 +2,6 @@
 
 This project is a FastAPI-based web application designed to handle streaming data. It includes Docker configurations for setting up a PostgreSQL database, pgAdmin for database management, and the FastAPI application.
 
-## Prerequisites
-
-Before you begin, make sure you have the following installed:
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
-
 ## Getting Started
 
 1. **Clone the Repository:**
